@@ -5,25 +5,37 @@
  * @author      Maxim Borzov
  * @copyright   Copyright (c) 2012, Maxim Borzov (max.borzov@gmail.com)
  * @link        http://github.com/borzov/wp-rss2yandex
- * @since       Version 0.1
+ * @since       Version 0.2
  */
 
-header('Content-Type: ' . feed_content_type('rss-http') . '; charset=' . get_option('blog_charset'), true);
-$more = 1;
+//For more complex and customizable plugins that provide many options
+$settings = array(
+    // You blog title, max 100 chars
+    'blog_name'  => get_bloginfo_rss('name'),
+    // HTTP-link to you blog
+    'blog_url'   => get_bloginfo_rss('url'),
+    // Short description, max 255 chars
+    'blog_desc'  => get_bloginfo_rss('description'),
+    // HTTP-link to logo
+    'blog_logo'  => get_bloginfo('template_directory') . '/images/logo.jpg'
+);
 
-echo '<?xml version="1.0" encoding="'.get_option('blog_charset').'"?'.'>';
+// Send a raw HTTP header to browser with type and charset information
+//header('Content-Type: ' . feed_content_type('rss-http') . '; charset=' . get_option('blog_charset'), true);
 
+// RSS is a dialect of XML. All RSS files must conform to the XML 1.0 specification
+printf('<?xml version="1.0" encoding="%s"?>', get_option('blog_charset'));
 ?>
 
 <rss xmlns:yandex="http://news.yandex.ru" xmlns:media="http://search.yahoo.com/mrss/" version="2.0">
 <channel>
-    <title><?=bloginfo_rss('name')?></title>
-    <link><?=bloginfo_rss('url')?></link>
-    <description><?=bloginfo_rss("description")?></description>
+    <title><?=$settings['blog_name']?></title>
+    <link><?=$settings['blog_url']?></link>
+    <description><?=$settings['blog_desc']?></description>
     <image>
-        <title><?=bloginfo_rss('name')?></title>
-        <link><?=bloginfo_rss('url')?></link>
-        <url><?=$cfg['logo'] ?></url>
+        <title><?=$settings['blog_name']?></title>
+        <link><?=$settings['blog_url']?></link>
+        <url><?=$settings['blog_logo'] ?></url>
     </image>
     <?php while( have_posts()) : the_post(); ?>
     <item>
@@ -33,18 +45,24 @@ echo '<?xml version="1.0" encoding="'.get_option('blog_charset').'"?'.'>';
         <author><?=the_author()?></author>
         <category><?php $category = get_the_category(); echo $category[0]->cat_name; ?></category>
         <?php
+            // Over-ride the default $more global variable
+            $more = 1;
+            // We will search for the src="" and <img> for extracting Images from post content
             preg_match_all('/<img.+src=[\'"]([^\'"]+)[\'"].*>/i',$post->post_content, $post_images);
+            // Check to see if we have at least 1 image
             if(!empty($post_images[1]) && count($post_images[1]) > 0) {
+                // Generate the <enclosure> elements allows a media-files to be included with an item
                 foreach($post_images[1] as $image) {
+                    // Check remote file availability
                     if (@fopen($image, "r")) {
                         $image_info=getimagesize($image);
-                        ?><enclosure url="<?=$image?>" type="<?=$image_info['mime']?>" /><?
+                        printf('<enclosure url="%s" type="%s" />', $image, $image_info['mime']);
                     }
                 }
             }
         ?>
         <description><?=strip_tags(apply_filters('the_excerpt_rss',get_the_excerpt(true)))?></description>
-        <yandex:full-text><?=htmlspecialchars(strip_tags(apply_filters('the_content_rss', $post->post_content), ENT_QUOTES))?></yandex:full-text>
+        <yandex:full-text><?=trim(htmlspecialchars(strip_tags(apply_filters('the_content_rss', $post->post_content), ENT_QUOTES)))?></yandex:full-text>
     </item>
     <?php endwhile; ?>
 </channel>
