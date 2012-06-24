@@ -21,7 +21,7 @@ $settings = array(
 );
 
 // Send a raw HTTP header to browser with type and charset information
-//header('Content-Type: ' . feed_content_type('rss-http') . '; charset=' . get_option('blog_charset'), true);
+header('Content-Type: ' . feed_content_type('rss-http') . '; charset=' . get_option('blog_charset'), true);
 
 // RSS is a dialect of XML. All RSS files must conform to the XML 1.0 specification
 printf('<?xml version="1.0" encoding="%s"?>', get_option('blog_charset'));
