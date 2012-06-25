@@ -1,5 +1,4 @@
-wp-rss2yandex
-=============
+# wp-rss2yandex
 
 RSS2Yandex Feed Template for displaying RSS2 Posts feed with [Yandex.News](http://news.yandex.ru/) compatible.
 
@@ -7,8 +6,7 @@ Yandex.News is the first news service in Russia that automatically processes and
 
 Specialists in various fields use the service: economists, entrepreneurs, journalists, political analysts, IT specialists, employees of the State Information Service and private companies.
 
-How to use
--------
+## How to use
 
 A simple to use feed template that makes feed for Yandex.News service. The new feed availeble after installation by simple URL, like that:
 
@@ -18,8 +16,7 @@ or that:
 
     http://site.com/export.php
 
-Install
--------
+## Install
 
 Choose one of the two ways to installation feed template:
 
@@ -28,7 +25,7 @@ Choose one of the two ways to installation feed template:
 1. Upload `feed-rss2yandex.php` to the `/wp-includes` directory
 2. Open `functions.php` into you theme folder (path like `/wp-content/themes/[theme]/functions.php`)
 3. Insert this code into `functions.php`:
-
+<pre>
     /**
      * Add new custom feed (rss2yandex)
      */
@@ -36,6 +33,7 @@ Choose one of the two ways to installation feed template:
     function acme_product_feed_rss2yandex() {
         load_template( ABSPATH . WPINC . '/feed-rss2yandex.php' );
     }
+</pre>
     
 4. That's all, now you can test feed:
 
@@ -49,8 +47,7 @@ Choose one of the two ways to installation feed template:
 
     http://site.com/export.php
 
-Changelog
--------
+## Changelog
 
 ### 0.2
 
