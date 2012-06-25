@@ -26,9 +26,6 @@ Choose one of the two ways to installation feed template:
 2. Open `functions.php` into you theme folder (path like `/wp-content/themes/[theme]/functions.php`)
 3. Insert this code into `functions.php`:
 <pre>
-    /**
-     * Add new custom feed (rss2yandex)
-     */
     add_action('do_feed_rss2yandex', 'acme_product_feed_rss2yandex', 10, 1 );
     function acme_product_feed_rss2yandex() {
         load_template( ABSPATH . WPINC . '/feed-rss2yandex.php' );
