@@ -33,18 +33,21 @@ Choose one of the two ways to installation feed template:
 </pre>
     
 4. That's all, now you can test feed:
-
-    http://site.com/?feed=rss2yandex
+   http://site.com/?feed=rss2yandex
 
 ### Way #2
 
 1. Upload `feed-rss2yandex.php` to the `/wp-includes` directory
 2. Upload `wp-export.php` to the WP root directory
 3. That's all, now you can test feed:
-
-    http://site.com/export.php
+   http://site.com/export.php
 
 ## Changelog
+
+### 0.3
+
+* Now feed contains auto-generated <yandex:related>
+* Small improvements into image extraction regexp
 
 ### 0.2
 

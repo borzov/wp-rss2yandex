@@ -5,7 +5,7 @@
  * @author      Maxim Borzov
  * @copyright   Copyright (c) 2012, Maxim Borzov (max.borzov@gmail.com)
  * @link        http://github.com/borzov/wp-rss2yandex
- * @since       Version 0.2
+ * @since       Version 0.3
  */
 
 //For more complex and customizable plugins that provide many options
@@ -48,7 +48,7 @@ printf('<?xml version="1.0" encoding="%s"?>', get_option('blog_charset'));
             // Over-ride the default $more global variable
             $more = 1;
             // We will search for the src="" and <img> for extracting Images from post content
-            preg_match_all('/<img.+src=[\'"]([^\'"]+)[\'"].*>/i',$post->post_content, $post_images);
+            preg_match_all("/<img[^']*?src=\"([^']*?)\"[^']*?>/i",$post->post_content, $post_images);
             // Check to see if we have at least 1 image
             if(!empty($post_images[1]) && count($post_images[1]) > 0) {
                 // Generate the <enclosure> elements allows a media-files to be included with an item
@@ -59,6 +59,14 @@ printf('<?xml version="1.0" encoding="%s"?>', get_option('blog_charset'));
                         printf('<enclosure url="%s" type="%s" />', $image, $image_info['mime']);
                     }
                 }
+            }
+            // Extract all links to generate recommended <yandex:related>
+            if (preg_match_all("/<a\s[^>]*href=(\"??)([^\" >]*?)\\1[^>]*>(.*)<\/a>/siU", $post->post_content, $post_links, PREG_SET_ORDER)) {
+                print '<yandex:related>';
+                foreach($post_links as $link) {
+                    printf('<link url="%s">%s</link>', $link[2], $link[3]);
+                }
+                print '</yandex:related>';
             }
         ?>
         <description><?=strip_tags(apply_filters('the_excerpt_rss',get_the_excerpt(true)))?></description>
