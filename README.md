@@ -44,6 +44,12 @@ Choose one of the two ways to installation feed template:
 
 ## Changelog
 
+### 0.4
+
+* Fixed generation <pubDate>
+* Fixed generation <yandex:related>
+* Extracting of images and external now is a single functions
+
 ### 0.3
 
 * Now feed contains auto-generated <yandex:related>
