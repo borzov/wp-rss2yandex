@@ -94,7 +94,7 @@ printf('<?xml version="1.0" encoding="%s"?>', get_option('blog_charset'));
         <title><?=the_title_rss()?></title>
         <link><?=the_permalink_rss()?></link>
         <pubDate><?=mysql2date('D, d M Y H:i:s +' . sprintf('%02d00', get_option('gmt_offset')), get_date_from_gmt(get_post_time('Y-m-d H:i:s', true)), false)?></pubDate>
-        <author><?=the_author()?></author>
+        <author><?the_author()?></author>
         <category><?php $category = get_the_category(); echo $category[0]->cat_name; ?></category>
         <?php
             // Over-ride the default $more global variable
